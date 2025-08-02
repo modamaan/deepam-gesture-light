@@ -16,9 +16,9 @@ export const MovingDeepam = ({ position, isVisible, onReachTarget, targetPositio
     Math.pow(position.y - targetPosition.y, 2)
   );
 
-  // Trigger lighting when close enough to target
-  if (distance < 80 && onReachTarget) {
-    setTimeout(onReachTarget, 100);
+  // Trigger lighting when close enough to target (increased threshold)
+  if (distance < 120 && onReachTarget) {
+    setTimeout(onReachTarget, 50); // Faster response
   }
 
   return (

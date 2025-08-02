@@ -27,10 +27,11 @@ export const VirtualInauguration = () => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     
-    const screenX = rect.width - (position.x / 640) * 320; // Flip X for mirror effect, scale for camera window
-    const screenY = (position.y / 480) * 240; // Scale for camera window
+    // Better coordinate mapping with higher resolution
+    const screenX = rect.width - (position.x / 800) * rect.width; // Full screen mapping
+    const screenY = (position.y / 600) * rect.height; // Full screen mapping
     
-    setHandPosition({ x: screenX + rect.left, y: screenY + rect.top });
+    setHandPosition({ x: screenX, y: screenY });
     
     if (isClenched && state === 'idle') {
       setState('detecting');

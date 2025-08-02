@@ -91,9 +91,9 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
         
         hands.setOptions({
           maxNumHands: 1,
-          modelComplexity: 1,
-          minDetectionConfidence: 0.5,
-          minTrackingConfidence: 0.5
+          modelComplexity: 0, // Faster processing
+          minDetectionConfidence: 0.3, // Lower threshold for better detection
+          minTrackingConfidence: 0.3  // Lower threshold for smoother tracking
         });
         
         hands.onResults(onResults);
@@ -104,8 +104,8 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
               await hands.send({ image: videoRef.current });
             }
           },
-          width: 640,
-          height: 480
+          width: 800, // Higher resolution for better hand visibility
+          height: 600
         });
         
         await camera.start();
@@ -132,8 +132,8 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
       />
       <canvas
         ref={canvasRef}
-        width={640}
-        height={480}
+        width={800}
+        height={600}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
       {!isInitialized && (
