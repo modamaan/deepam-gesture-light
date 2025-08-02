@@ -121,13 +121,14 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
   }, [onResults, onCameraReady]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full h-full">
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover rounded-lg border-2 border-primary/30"
+        className="w-full h-full object-cover rounded-lg"
         autoPlay
         playsInline
         muted
+        style={{ transform: 'scaleX(-1)' }}
       />
       <canvas
         ref={canvasRef}
