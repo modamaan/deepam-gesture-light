@@ -11,6 +11,7 @@ type CeremonyState = 'idle' | 'detecting' | 'moving' | 'lit' | 'blessing';
 export const VirtualInauguration = () => {
   const [state, setState] = useState<CeremonyState>('idle');
   const [handPosition, setHandPosition] = useState({ x: 0, y: 0 });
+  const [deepamPosition, setDeepamPosition] = useState({ x: 640, y: 600 }); // Start from bottom center
   const [showMovingDeepam, setShowMovingDeepam] = useState(false);
   const [mainLampLit, setMainLampLit] = useState(false);
   const [showBlessings, setShowBlessings] = useState(false);
@@ -36,6 +37,11 @@ export const VirtualInauguration = () => {
     if (isClenched && state === 'idle') {
       setState('detecting');
       setShowMovingDeepam(true);
+      // Start deepam from bottom center
+      setDeepamPosition({ x: rect.width / 2, y: rect.height - 100 });
+    } else if (isClenched && showMovingDeepam) {
+      // Follow hand when clenched and deepam is visible
+      setDeepamPosition({ x: screenX, y: screenY });
     } else if (!isClenched && showMovingDeepam) {
       setShowMovingDeepam(false);
       setState('idle');
@@ -63,6 +69,7 @@ export const VirtualInauguration = () => {
     setShowMovingDeepam(false);
     setMainLampLit(false);
     setShowBlessings(false);
+    setDeepamPosition({ x: 640, y: 600 }); // Reset to bottom center
   }, []);
 
   return (
@@ -165,7 +172,7 @@ export const VirtualInauguration = () => {
       {/* Moving Deepam */}
       <AnimatePresence>
         <MovingDeepam
-          position={handPosition}
+          position={deepamPosition}
           isVisible={showMovingDeepam}
           targetPosition={mainLampPosition}
           onReachTarget={onDeepamReachTarget}
