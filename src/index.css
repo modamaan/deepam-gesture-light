@@ -2,41 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Sacred Deepam Ceremony Design System - Warm ceremonial colors with mystical ambiance */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Mystical background - deep ceremonial blue to black gradient */
+    --background: 240 40% 8%;
+    --foreground: 45 100% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card surfaces with warm golden tint */
+    --card: 240 30% 12%;
+    --card-foreground: 45 100% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 30% 12%;
+    --popover-foreground: 45 100% 95%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Sacred golden primary - like brass deepam */
+    --primary: 45 93% 60%;
+    --primary-foreground: 240 40% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Warm secondary tones */
+    --secondary: 35 80% 50%;
+    --secondary-foreground: 240 40% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted ceremonial tones */
+    --muted: 240 20% 20%;
+    --muted-foreground: 45 60% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Flame accent colors */
+    --accent: 20 90% 55%;
+    --accent-foreground: 240 40% 8%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 45 100% 95%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 20% 25%;
+    --input: 240 20% 20%;
+    --ring: 45 93% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom ceremonial colors */
+    --flame-gold: 45 93% 60%;
+    --flame-orange: 20 90% 55%;
+    --flame-red: 10 85% 50%;
+    --brass: 42 85% 45%;
+    --mystical-blue: 240 40% 8%;
+    --sacred-glow: 45 100% 80%;
+    
+    /* Gradients */
+    --gradient-flame: linear-gradient(135deg, hsl(var(--flame-red)), hsl(var(--flame-orange)), hsl(var(--flame-gold)));
+    --gradient-mystical: linear-gradient(180deg, hsl(var(--mystical-blue)), hsl(240 60% 4%));
+    --gradient-brass: linear-gradient(145deg, hsl(var(--brass)), hsl(var(--flame-gold)));
+    
+    /* Shadows and glows */
+    --shadow-flame: 0 0 30px hsl(var(--flame-orange) / 0.6);
+    --shadow-sacred: 0 10px 40px hsl(var(--flame-gold) / 0.3);
+    --glow-deepam: 0 0 60px hsl(var(--sacred-glow) / 0.4);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +80,34 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Enhanced dark mode for deeper mystical experience */
+    --background: 240 60% 4%;
+    --foreground: 45 100% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 50% 6%;
+    --card-foreground: 45 100% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 50% 6%;
+    --popover-foreground: 45 100% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 45 93% 70%;
+    --primary-foreground: 240 60% 4%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 35 80% 60%;
+    --secondary-foreground: 240 60% 4%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 240 30% 15%;
+    --muted-foreground: 45 60% 75%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 20 90% 65%;
+    --accent-foreground: 240 60% 4%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 70%;
+    --destructive-foreground: 240 60% 4%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 240 30% 18%;
+    --input: 240 30% 15%;
+    --ring: 45 93% 70%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
