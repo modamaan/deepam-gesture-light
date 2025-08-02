@@ -75,31 +75,9 @@ export const VirtualInauguration = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-screen bg-mystical-gradient overflow-hidden"
+      className="relative w-full h-screen bg-gradient-to-b from-background via-accent/10 to-primary/20 overflow-hidden"
     >
-      {/* Background stars */}
-      <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-primary rounded-full opacity-60"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              opacity: [0.3, 1, 0.3],
-              scale: [1, 1.2, 1]
-            }}
-            transition={{
-              duration: 2 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
+      {/* Clean background - no stars */}
 
       {/* Main Deepam in center */}
       <motion.div
@@ -135,38 +113,45 @@ export const VirtualInauguration = () => {
         )}
       </motion.div>
 
-      {/* Camera view in bottom-left corner */}
+      {/* Camera view - smaller and more subtle */}
       <motion.div
-        className="absolute bottom-6 left-6 w-80 h-60 rounded-xl overflow-hidden border-2 border-primary/40 shadow-lg z-20"
+        className="absolute bottom-6 right-6 w-64 h-48 rounded-lg overflow-hidden border border-border/50 shadow-sm z-20 bg-card/80 backdrop-blur-sm"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.5 }}
       >
-        <HandTracking 
-          onHandDetected={onHandDetected}
-          onCameraReady={onCameraReady}
-        />
+        <div className="text-xs text-muted-foreground p-2 bg-card/60 text-center">
+          Camera View
+        </div>
+        <div className="relative h-full">
+          <HandTracking 
+            onHandDetected={onHandDetected}
+            onCameraReady={onCameraReady}
+          />
+        </div>
       </motion.div>
 
-      {/* Instructions */}
+      {/* Modern Header */}
       <motion.div
         className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center z-20"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
+        transition={{ duration: 1, delay: 0.3 }}
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-          Virtual Inauguration Deepam
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 flex items-center justify-center gap-3">
+          <span>🪔</span>
+          Virtual Inauguration Ceremony
+          <span>🪔</span>
         </h1>
-        <p className="text-lg text-foreground mb-2">
+        <p className="text-lg text-muted-foreground mb-6">
+          Lamp Lighting (Deepam) Experience
+        </p>
+        <div className="text-sm text-muted-foreground">
           {state === 'idle' && "Make a fist to light the sacred deepam"}
           {state === 'detecting' && "Move your hand toward the main lamp"}
           {state === 'lit' && "The sacred light has been kindled"}
           {state === 'blessing' && "May the divine light bless you"}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          Position your hand in front of the camera and clench your fist
-        </p>
+        </div>
       </motion.div>
 
       {/* Moving Deepam */}
@@ -196,7 +181,7 @@ export const VirtualInauguration = () => {
           >
             <Button
               onClick={resetCeremony}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-lg font-medium shadow-sacred"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 text-base font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
             >
               Light Again
             </Button>
@@ -204,27 +189,27 @@ export const VirtualInauguration = () => {
         )}
       </AnimatePresence>
 
-      {/* Particle effects when lit */}
+      {/* Subtle particle effects when lit */}
       {mainLampLit && (
         <div className="absolute inset-0 pointer-events-none z-5">
-          {[...Array(20)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-primary rounded-full"
+              className="absolute w-1 h-1 bg-primary/60 rounded-full"
               style={{
-                left: `${45 + Math.random() * 10}%`,
-                top: `${45 + Math.random() * 10}%`,
+                left: `${48 + Math.random() * 4}%`,
+                top: `${48 + Math.random() * 4}%`,
               }}
               animate={{
-                y: [-20, -100],
-                x: [0, Math.random() * 40 - 20],
+                y: [-10, -50],
+                x: [0, Math.random() * 20 - 10],
                 opacity: [1, 0],
                 scale: [1, 0]
               }}
               transition={{
-                duration: 3,
+                duration: 2,
                 repeat: Infinity,
-                delay: Math.random() * 2,
+                delay: Math.random() * 1.5,
                 ease: "easeOut"
               }}
             />
