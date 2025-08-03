@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { DeepamSVG } from "./DeepamSVG";
 
 interface MovingDeepamProps {
   position: { x: number; y: number };
@@ -8,7 +7,17 @@ interface MovingDeepamProps {
   targetPosition: { x: number; y: number };
 }
 
+import { useRef, useEffect } from "react";
+
 export const MovingDeepam = ({ position, isVisible, onReachTarget, targetPosition }: MovingDeepamProps) => {
+  const hasReachedTarget = useRef(false);
+
+  useEffect(() => {
+    if (!isVisible) {
+      hasReachedTarget.current = false;
+    }
+  }, [isVisible]);
+
   if (!isVisible) return null;
 
   const distance = Math.sqrt(
@@ -16,8 +25,12 @@ export const MovingDeepam = ({ position, isVisible, onReachTarget, targetPositio
     Math.pow(position.y - targetPosition.y, 2)
   );
 
+  // Debug: log coordinates and distance
+  console.log("MovingDeepam: pos", position, "target", targetPosition, "distance", distance, "isVisible", isVisible);
+
   // Trigger lighting when close enough to target (increased threshold)
-  if (distance < 120 && onReachTarget) {
+  if (distance < 200 && onReachTarget && !hasReachedTarget.current) {
+    hasReachedTarget.current = true;
     setTimeout(onReachTarget, 50); // Faster response
   }
 
@@ -67,7 +80,17 @@ export const MovingDeepam = ({ position, isVisible, onReachTarget, targetPositio
           ease: "easeInOut"
         }}
       >
-        <DeepamSVG isLit={true} size="small" />
+        <motion.img
+  src="/lamp_svg.svg"
+  alt="Deepam Lamp"
+  width={80}
+  height={120}
+  initial={{ scale: 0, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  exit={{ scale: 0, opacity: 0 }}
+  transition={{ scale: { duration: 0.3, ease: 'easeOut' }, opacity: { duration: 0.3 } }}
+  style={{ pointerEvents: 'none', display: 'block' }}
+/>
       </motion.div>
       
       {/* Sparkle particles */}

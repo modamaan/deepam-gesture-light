@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HandTracking } from './HandTracking';
 import { DeepamSVG } from './DeepamSVG';
@@ -11,7 +11,7 @@ type CeremonyState = 'idle' | 'detecting' | 'moving' | 'lit' | 'blessing';
 export const VirtualInauguration = () => {
   const [state, setState] = useState<CeremonyState>('idle');
   const [handPosition, setHandPosition] = useState({ x: 0, y: 0 });
-  const [deepamPosition, setDeepamPosition] = useState({ x: 640, y: 600 }); // Start from bottom center
+  const [deepamPosition, setDeepamPosition] = useState({ x: 0, y: 600 }); // Start from bottom left
   const [showMovingDeepam, setShowMovingDeepam] = useState(false);
   const [mainLampLit, setMainLampLit] = useState(false);
   const [showBlessings, setShowBlessings] = useState(false);
@@ -20,8 +20,22 @@ export const VirtualInauguration = () => {
   const mainLampRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Main lamp position (center of screen)
-  const mainLampPosition = { x: 640, y: 360 };
+  // Dynamically track main lamp center in screen coordinates
+  const [mainLampCenter, setMainLampCenter] = useState({ x: 640, y: 360 });
+  useLayoutEffect(() => {
+    function updateLampCenter() {
+      if (mainLampRef.current) {
+        const rect = mainLampRef.current.getBoundingClientRect();
+        setMainLampCenter({
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }
+    }
+    updateLampCenter();
+    window.addEventListener('resize', updateLampCenter);
+    return () => window.removeEventListener('resize', updateLampCenter);
+  }, []);
 
   const onHandDetected = useCallback((position: { x: number; y: number }, isClenched: boolean) => {
     // Convert camera coordinates to screen coordinates
@@ -37,8 +51,8 @@ export const VirtualInauguration = () => {
     if (isClenched && state === 'idle') {
       setState('detecting');
       setShowMovingDeepam(true);
-      // Start deepam from bottom center
-      setDeepamPosition({ x: rect.width / 2, y: rect.height - 100 });
+      // Start deepam from bottom left
+      setDeepamPosition({ x: 0, y: rect.height - 100 });
     } else if (isClenched && showMovingDeepam) {
       // Follow hand when clenched and deepam is visible
       setDeepamPosition({ x: screenX, y: screenY });
@@ -69,7 +83,7 @@ export const VirtualInauguration = () => {
     setShowMovingDeepam(false);
     setMainLampLit(false);
     setShowBlessings(false);
-    setDeepamPosition({ x: 640, y: 600 }); // Reset to bottom center
+    setDeepamPosition({ x: 0, y: 600 }); // Reset to bottom left
   }, []);
 
   return (
@@ -82,7 +96,7 @@ export const VirtualInauguration = () => {
       {/* Main Deepam in center */}
       <motion.div
         ref={mainLampRef}
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+        className="absolute top-[60%] left-[40%] transform -translate-x-1/2 -translate-y-1/2 z-10"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ 
           scale: mainLampLit ? 1.1 : 1, 
@@ -133,20 +147,20 @@ export const VirtualInauguration = () => {
 
       {/* Modern Header */}
       <motion.div
-        className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center z-20"
+        className=" flex flex-col justify-center items-center my-20"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 0.3 }}
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 flex items-center justify-center gap-3">
-          <span>🪔</span>
+        <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-1 sm:mb-2 flex flex-wrap items-center justify-center gap-1 sm:gap-3">
+          <span className="hidden xs:inline">🪔</span>
           Virtual Inauguration Ceremony
-          <span>🪔</span>
+          <span className="hidden xs:inline">🪔</span>
         </h1>
-        <p className="text-lg text-muted-foreground mb-6">
+        <p className="text-base xs:text-lg sm:text-xl text-muted-foreground mb-2 sm:mb-6">
           Lamp Lighting (Deepam) Experience
         </p>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-xs xs:text-sm sm:text-base text-muted-foreground">
           {state === 'idle' && "Make a fist to light the sacred deepam"}
           {state === 'detecting' && "Move your hand toward the main lamp"}
           {state === 'lit' && "The sacred light has been kindled"}
@@ -159,7 +173,7 @@ export const VirtualInauguration = () => {
         <MovingDeepam
           position={deepamPosition}
           isVisible={showMovingDeepam}
-          targetPosition={mainLampPosition}
+          targetPosition={mainLampCenter}
           onReachTarget={onDeepamReachTarget}
         />
       </AnimatePresence>

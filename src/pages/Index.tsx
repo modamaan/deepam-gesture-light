@@ -1,7 +1,11 @@
 import { VirtualInauguration } from "@/components/VirtualInauguration";
 
 const Index = () => {
-  return <VirtualInauguration />;
+  return (
+    <div className="">
+      <VirtualInauguration />
+    </div>
+  );
 };
 
 export default Index;
