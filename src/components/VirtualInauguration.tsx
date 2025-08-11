@@ -147,7 +147,7 @@ export const VirtualInauguration = () => {
 
       {/* Modern Header */}
       <motion.div
-        className=" flex flex-col justify-center items-center my-20"
+        className=" flex flex-col justify-center items-center my-20 gap-5"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 0.3 }}

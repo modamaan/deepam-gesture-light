@@ -11,6 +11,7 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
 
   const detectClenchedFist = useCallback((landmarks: any[]) => {
     if (!landmarks || landmarks.length === 0) return false;
@@ -83,6 +84,17 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
       if (!videoRef.current || !canvasRef.current) return;
       
       try {
+        // Try to get camera access first to show a clear error if denied
+        await navigator.mediaDevices.getUserMedia({ video: true });
+      } catch (err: any) {
+        setCameraError(
+          window.isSecureContext
+            ? 'Camera access denied or not available. Please allow camera permissions.'
+            : 'Camera access requires HTTPS. Please use a secure (https://) connection.'
+        );
+        return;
+      }
+      try {
         const hands = new Hands({
           locateFile: (file) => {
             return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
@@ -113,6 +125,7 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
         onCameraReady(videoRef.current);
         
       } catch (error) {
+        setCameraError('Failed to initialize hand tracking: ' + (error as Error).message);
         console.error('Failed to initialize hand tracking:', error);
       }
     };
@@ -136,11 +149,19 @@ export const HandTracking = ({ onHandDetected, onCameraReady }: HandTrackingProp
         height={600}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
-      {!isInitialized && (
+      {!isInitialized && !cameraError && (
         <div className="absolute inset-0 flex items-center justify-center bg-card/80 rounded-lg">
           <div className="text-center">
             <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
             <p className="text-sm text-muted-foreground">Initializing camera...</p>
+          </div>
+        </div>
+      )}
+      {cameraError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-red-100/90 rounded-lg z-20">
+          <div className="text-center">
+            <p className="text-base text-red-600 font-semibold">{cameraError}</p>
+            <p className="text-xs text-red-500 mt-2">If you are on Vercel, make sure you are using HTTPS and have granted camera permissions.</p>
           </div>
         </div>
       )}
